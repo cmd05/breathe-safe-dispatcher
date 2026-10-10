@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   AlertTriangle,
   BarChart3,
@@ -44,6 +44,7 @@ import {
   zones,
   zoneById,
 } from "./data";
+import { fetchBackendRecommendation, type BackendRecommendation } from "./backend";
 import mlPredictions from "./mlPredictions.json";
 
 type Page = "dispatch" | "rider" | "consumer" | "prompts" | "metrics";
@@ -77,6 +78,7 @@ function App() {
   const [page, setPage] = useState<Page>("dispatch");
   const [selectedOptionId, setSelectedOptionId] = useState(recommended.id);
   const [darkMode, setDarkMode] = useState(true);
+  const [backendRecommendation, setBackendRecommendation] = useState<BackendRecommendation | null>(null);
   const selectedOption = scenario.options.find((option) => option.id === selectedOptionId) ?? recommended;
 
   const metrics = useMemo(() => {
@@ -89,6 +91,10 @@ function App() {
       prompts: 4,
       shiftExposureDrop: 19,
     };
+  }, []);
+
+  useEffect(() => {
+    fetchBackendRecommendation().then(setBackendRecommendation);
   }, []);
 
   return (
@@ -110,8 +116,12 @@ function App() {
 
         <div className="sidebar-card">
           <span>Demo mode</span>
-          <strong>PM2.5 baseline + dispatch rules</strong>
-          <small>Mock delivery data. Real-world deployment would connect live data.</small>
+          <strong>{backendRecommendation ? "AWS API connected" : "PM2.5 baseline + dispatch rules"}</strong>
+          <small>
+            {backendRecommendation
+              ? "Recommendation served by Lambda through API Gateway."
+              : "Mock delivery data. Real-world deployment would connect live data."}
+          </small>
         </div>
       </aside>
 
@@ -122,6 +132,7 @@ function App() {
             selectedOptionId={selectedOptionId}
             onSelectOption={setSelectedOptionId}
             metrics={metrics}
+            backendRecommendation={backendRecommendation}
           />
         )}
         {page === "rider" && <RiderRoute option={selectedOption} onSelectOption={setSelectedOptionId} />}
@@ -167,10 +178,12 @@ function DispatchDashboard({
   selectedOptionId,
   onSelectOption,
   metrics,
+  backendRecommendation,
 }: {
   selectedOptionId: string;
   onSelectOption: (id: string) => void;
   metrics: DashboardMetrics;
+  backendRecommendation: BackendRecommendation | null;
 }) {
   return (
     <section className="content-grid dispatch-grid">
@@ -208,9 +221,14 @@ function DispatchDashboard({
             <ShieldCheck />
           </div>
           <div>
-            <span className="eyebrow">Recommendation</span>
-            <h3>Use Saket Cleaner Hub.</h3>
-            <p>{metrics.saved}% less exposure, only +{metrics.delay} min, still under SLA.</p>
+            <span className="eyebrow">
+              {backendRecommendation ? backendRecommendation.source : "Recommendation"}
+            </span>
+            <h3>{backendRecommendation?.recommendation.title ?? "Use Saket Cleaner Hub."}</h3>
+            <p>
+              {backendRecommendation?.recommendation.reason ??
+                `${metrics.saved}% less exposure, only +${metrics.delay} min, still under SLA.`}
+            </p>
           </div>
         </div>
       </div>

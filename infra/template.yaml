@@ -1,0 +1,61 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: BreatheSafe Dispatcher slice 9 serverless backend.
+
+Globals:
+  Function:
+    Runtime: nodejs22.x
+    Timeout: 10
+    MemorySize: 128
+    Architectures:
+      - arm64
+    LoggingConfig:
+      LogFormat: JSON
+  HttpApi:
+    CorsConfiguration:
+      AllowOrigins:
+        - "*"
+      AllowMethods:
+        - GET
+        - OPTIONS
+      AllowHeaders:
+        - content-type
+
+Resources:
+  BreatheSafeApi:
+    Type: AWS::Serverless::HttpApi
+
+  DispatchRecommendationFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../serverless/dispatch-recommendation/
+      Handler: index.handler
+      Description: Returns a pollution-aware delivery recommendation for the demo order.
+      Events:
+        RecommendationApi:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref BreatheSafeApi
+            Path: /recommendation
+            Method: GET
+
+  PollutionRefreshFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../serverless/pollution-refresh/
+      Handler: index.handler
+      Description: Scheduled PM2.5 refresh placeholder for the demo data pipeline.
+      Events:
+        HourlyPollutionRefresh:
+          Type: ScheduleV2
+          Properties:
+            ScheduleExpression: rate(1 hour)
+            Description: Refreshes the PM2.5 risk window used by BreatheSafe Dispatcher.
+
+Outputs:
+  RecommendationApiUrl:
+    Description: API Gateway URL for the dispatch recommendation endpoint.
+    Value: !Sub "https://${BreatheSafeApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/recommendation"
+  PollutionRefreshFunctionName:
+    Description: Lambda function invoked by EventBridge Scheduler.
+    Value: !Ref PollutionRefreshFunction
