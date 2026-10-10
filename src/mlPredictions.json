@@ -6,7 +6,7 @@
     "library": "scikit-learn",
     "alpha": 0.1,
     "target": "next_window_pm25",
-    "generatedAt": "2026-10-10T19:55:12.023503Z",
+    "generatedAt": "2026-10-10T20:21:20.237802Z",
     "trainingRows": 24,
     "validationRows": 6,
     "note": "Hackathon baseline trained on compact Delhi/NCR demo data. It is designed for explainable dispatch ranking, not public-health forecasting."

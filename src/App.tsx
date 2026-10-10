@@ -20,14 +20,14 @@ import {
   Wind,
 } from "lucide-react";
 import {
-  Line,
-  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
   Bar,
   BarChart,
+  CartesianGrid,
+  ReferenceLine,
 } from "recharts";
 import { MapContainer, Marker, Polyline, Popup, TileLayer, CircleMarker } from "react-leaflet";
 import L from "leaflet";
@@ -76,7 +76,7 @@ const icon = L.divIcon({
 function App() {
   const [page, setPage] = useState<Page>("dispatch");
   const [selectedOptionId, setSelectedOptionId] = useState(recommended.id);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
   const selectedOption = scenario.options.find((option) => option.id === selectedOptionId) ?? recommended;
 
   const metrics = useMemo(() => {
@@ -374,7 +374,7 @@ function SafetyPrompts() {
 
 function ConsumerView({ metrics }: { metrics: DashboardMetrics }) {
   return (
-    <section className="consumer-layout">
+    <section className="consumer-layout compact-page">
       <div className="panel consumer-phone-shell">
         <div className="phone-section-title">
           <span className="eyebrow">Customer app view</span>
@@ -450,19 +450,19 @@ function Metrics({ metrics }: { metrics: DashboardMetrics }) {
   const modelEvaluation = mlPredictions.evaluation;
   const routeData = scenario.options.map((option) => ({
     name: option.label,
-    exposure: option.exposure,
-    time: option.minutes,
-    riskyKm: option.riskyKm,
+    exposureScore: option.exposure,
+    deliveryMinutes: option.minutes,
+    pollutedKm: option.riskyKm,
   }));
 
   const forecastData = zones.slice(0, 7).map((zone) => ({
     name: zone.name.split(" ")[0],
-    forecast: zone.forecastPm25,
-    persistence: zone.persistencePm25,
+    predictedPm25: zone.forecastPm25,
+    sameAsNowPm25: zone.persistencePm25,
   }));
 
   return (
-    <section className="content-grid">
+    <section className="content-grid metrics-layout compact-page">
       <div className="panel span-2">
         <div className="panel-heading">
           <div>
@@ -487,34 +487,91 @@ function Metrics({ metrics }: { metrics: DashboardMetrics }) {
       </div>
 
       <div className="panel">
-        <h3>Which route is safest enough?</h3>
-        <p className="chart-caption">Lower exposure is better. Time should stay inside the delivery promise.</p>
+        <h3>Route choice: lower exposure wins</h3>
+        <p className="chart-caption">
+          Each bar is a rider pollution exposure score. Lower is better. Hover shows delivery time and polluted kilometers.
+        </p>
+        <div className="chart-key">
+          <span><i className="key-blue" /> Rider exposure score</span>
+          <span>Selected route: Recommended</span>
+        </div>
         <div className="chart">
           <ResponsiveContainer width="100%" height={260}>
             <BarChart data={routeData}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="exposure" fill="#2563eb" radius={[6, 6, 0, 0]} />
-              <Bar dataKey="time" fill="#0f9f6e" radius={[6, 6, 0, 0]} />
+              <YAxis label={{ value: "Exposure score", angle: -90, position: "insideLeft" }} />
+              <Tooltip
+                wrapperClassName="chart-tooltip"
+                contentStyle={{
+                  background: "var(--surface)",
+                  border: "1px solid var(--line-strong)",
+                  borderRadius: 8,
+                  color: "var(--text)",
+                  boxShadow: "var(--shadow)",
+                }}
+                labelStyle={{ color: "var(--text)", marginBottom: 8 }}
+                itemStyle={{ color: "var(--green-strong)" }}
+                formatter={(value, name, item) => {
+                  if (name === "exposureScore") return [`${value} exposure score`, "Rider exposure"];
+                  return [value, name];
+                }}
+                labelFormatter={(label) => {
+                  const row = routeData.find((item) => item.name === label);
+                  return row
+                    ? `${label}: ${row.deliveryMinutes} min, ${row.pollutedKm} polluted km`
+                    : String(label);
+                }}
+              />
+              <Bar dataKey="exposureScore" name="Rider exposure score" fill="#2563eb" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
+        </div>
+        <div className="chart-takeaway">
+          Recommended cuts exposure from {fastest.exposure} to {recommended.exposure} while staying under {order.promisedMinutes} minutes.
         </div>
       </div>
 
       <div className="panel">
-        <h3>Where is the air worse?</h3>
-        <p className="chart-caption">Forecast shows expected PM2.5 by area; persistence is the simple “same as now” baseline.</p>
+        <h3>PM2.5 comparison by area</h3>
+        <p className="chart-caption">
+          Each area is compared for the same evening window. Green is the model forecast; gray is the simple same-as-now baseline.
+        </p>
+        <p className="chart-caption">
+          Same-as-now means assuming PM2.5 stays equal to the current reading, with no forecast model.
+        </p>
+        <div className="chart-key">
+          <span><i className="key-green" /> Model forecast</span>
+          <span><i className="key-gray" /> Same-as-now baseline</span>
+          <span><i className="key-red" /> Severe threshold</span>
+        </div>
         <div className="chart">
           <ResponsiveContainer width="100%" height={260}>
-            <LineChart data={forecastData}>
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Line type="monotone" dataKey="forecast" stroke="#2563eb" strokeWidth={3} dot={false} />
-              <Line type="monotone" dataKey="persistence" stroke="#94a3b8" strokeWidth={2} dot={false} />
-            </LineChart>
+            <BarChart data={forecastData}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="name" label={{ value: "Delhi/NCR area", position: "insideBottom", offset: -4 }} />
+              <YAxis label={{ value: "PM2.5", angle: -90, position: "insideLeft" }} />
+              <Tooltip
+                wrapperClassName="chart-tooltip"
+                contentStyle={{
+                  background: "var(--surface)",
+                  border: "1px solid var(--line-strong)",
+                  borderRadius: 8,
+                  color: "var(--text)",
+                  boxShadow: "var(--shadow)",
+                }}
+                labelStyle={{ color: "var(--text)", marginBottom: 8 }}
+                itemStyle={{ color: "var(--green-strong)" }}
+                formatter={(value, name) => [`${value} PM2.5`, name === "predictedPm25" ? "Model forecast" : "Same as now"]}
+              />
+              <ReferenceLine y={200} stroke="#dc2626" strokeDasharray="4 4" label="Severe" />
+              <Bar dataKey="predictedPm25" name="Model forecast" fill="#0f9f6e" radius={[5, 5, 0, 0]} />
+              <Bar dataKey="sameAsNowPm25" name="Same-as-now baseline" fill="#94a3b8" radius={[5, 5, 0, 0]} />
+            </BarChart>
           </ResponsiveContainer>
+        </div>
+        <div className="chart-takeaway">
+          Saket stays below the severe line, so the dispatcher can prefer it without delaying this order.
         </div>
       </div>
     </section>
