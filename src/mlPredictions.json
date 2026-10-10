@@ -1,0 +1,263 @@
+{
+  "model": {
+    "name": "BreatheSafe Delhi/NCR PM2.5 Baseline",
+    "kind": "sklearn_ridge_regression",
+    "runtime": "python",
+    "library": "scikit-learn",
+    "alpha": 0.1,
+    "target": "next_window_pm25",
+    "generatedAt": "2026-10-10T19:55:12.023503Z",
+    "trainingRows": 24,
+    "validationRows": 6,
+    "note": "Hackathon baseline trained on compact Delhi/NCR demo data. It is designed for explainable dispatch ranking, not public-health forecasting."
+  },
+  "evaluation": {
+    "trainingRmse": 2.57,
+    "validationRmse": 2.28,
+    "persistenceRmse": 12.12,
+    "improvementVsPersistencePct": 81.2
+  },
+  "featureNames": [
+    "currentPm25",
+    "hour",
+    "temperature",
+    "humidity",
+    "windKph",
+    "trafficIndex",
+    "demandIndex",
+    "constructionIndex",
+    "inversionRisk"
+  ],
+  "coefficients": {
+    "currentPm25": 24.5186,
+    "hour": -3.8439,
+    "temperature": 4.6269,
+    "humidity": -1.8537,
+    "windKph": 1.4426,
+    "trafficIndex": 3.1346,
+    "demandIndex": -3.2707,
+    "constructionIndex": 5.3015,
+    "inversionRisk": 20.6605
+  },
+  "intercept": 187.875,
+  "scaler": {
+    "currentPm25": {
+      "mean": 182.75,
+      "std": 36.309147148709876
+    },
+    "hour": {
+      "mean": 13.583333333333334,
+      "std": 4.5269256185136895
+    },
+    "temperature": {
+      "mean": 20.833333333333332,
+      "std": 2.91070819942883
+    },
+    "humidity": {
+      "mean": 52.708333333333336,
+      "std": 9.510867322290972
+    },
+    "windKph": {
+      "mean": 8.295833333333336,
+      "std": 2.6107915732376816
+    },
+    "trafficIndex": {
+      "mean": 64.54166666666667,
+      "std": 14.375845385769685
+    },
+    "demandIndex": {
+      "mean": 59.416666666666664,
+      "std": 13.225343935876383
+    },
+    "constructionIndex": {
+      "mean": 41.791666666666664,
+      "std": 14.935916350268643
+    },
+    "inversionRisk": {
+      "mean": 0.5833333333333334,
+      "std": 0.19301698255737904
+    }
+  },
+  "predictions": [
+    {
+      "zoneId": "cp",
+      "zoneName": "Connaught Place",
+      "predictedPm25": 223,
+      "persistencePm25": 214,
+      "risk": "Severe",
+      "features": {
+        "currentPm25": 214,
+        "hour": 19,
+        "temperature": 20,
+        "humidity": 58,
+        "windKph": 5.6,
+        "trafficIndex": 88,
+        "demandIndex": 81,
+        "constructionIndex": 46,
+        "inversionRisk": 0.78
+      }
+    },
+    {
+      "zoneId": "karol",
+      "zoneName": "Karol Bagh",
+      "predictedPm25": 248,
+      "persistencePm25": 238,
+      "risk": "Severe",
+      "features": {
+        "currentPm25": 238,
+        "hour": 19,
+        "temperature": 19,
+        "humidity": 61,
+        "windKph": 4.9,
+        "trafficIndex": 91,
+        "demandIndex": 86,
+        "constructionIndex": 61,
+        "inversionRisk": 0.84
+      }
+    },
+    {
+      "zoneId": "lajpat",
+      "zoneName": "Lajpat Nagar",
+      "predictedPm25": 202,
+      "persistencePm25": 194,
+      "risk": "Severe",
+      "features": {
+        "currentPm25": 194,
+        "hour": 19,
+        "temperature": 20,
+        "humidity": 56,
+        "windKph": 6.2,
+        "trafficIndex": 82,
+        "demandIndex": 78,
+        "constructionIndex": 40,
+        "inversionRisk": 0.73
+      }
+    },
+    {
+      "zoneId": "saket",
+      "zoneName": "Saket",
+      "predictedPm25": 163,
+      "persistencePm25": 162,
+      "risk": "High",
+      "features": {
+        "currentPm25": 162,
+        "hour": 19,
+        "temperature": 20,
+        "humidity": 54,
+        "windKph": 7.8,
+        "trafficIndex": 62,
+        "demandIndex": 64,
+        "constructionIndex": 27,
+        "inversionRisk": 0.61
+      }
+    },
+    {
+      "zoneId": "rohini",
+      "zoneName": "Rohini",
+      "predictedPm25": 267,
+      "persistencePm25": 256,
+      "risk": "Severe",
+      "features": {
+        "currentPm25": 256,
+        "hour": 19,
+        "temperature": 18,
+        "humidity": 64,
+        "windKph": 4.2,
+        "trafficIndex": 85,
+        "demandIndex": 76,
+        "constructionIndex": 68,
+        "inversionRisk": 0.9
+      }
+    },
+    {
+      "zoneId": "dwarka",
+      "zoneName": "Dwarka",
+      "predictedPm25": 177,
+      "persistencePm25": 181,
+      "risk": "High",
+      "features": {
+        "currentPm25": 181,
+        "hour": 19,
+        "temperature": 20,
+        "humidity": 52,
+        "windKph": 9.8,
+        "trafficIndex": 65,
+        "demandIndex": 62,
+        "constructionIndex": 34,
+        "inversionRisk": 0.57
+      }
+    },
+    {
+      "zoneId": "noida18",
+      "zoneName": "Noida Sector 18",
+      "predictedPm25": 185,
+      "persistencePm25": 176,
+      "risk": "High",
+      "features": {
+        "currentPm25": 176,
+        "hour": 19,
+        "temperature": 20,
+        "humidity": 55,
+        "windKph": 7.3,
+        "trafficIndex": 73,
+        "demandIndex": 70,
+        "constructionIndex": 39,
+        "inversionRisk": 0.68
+      }
+    },
+    {
+      "zoneId": "gurugram",
+      "zoneName": "Gurugram Cyber Hub",
+      "predictedPm25": 155,
+      "persistencePm25": 149,
+      "risk": "High",
+      "features": {
+        "currentPm25": 149,
+        "hour": 19,
+        "temperature": 21,
+        "humidity": 50,
+        "windKph": 9.9,
+        "trafficIndex": 69,
+        "demandIndex": 66,
+        "constructionIndex": 31,
+        "inversionRisk": 0.56
+      }
+    },
+    {
+      "zoneId": "ghaziabad",
+      "zoneName": "Ghaziabad",
+      "predictedPm25": 283,
+      "persistencePm25": 271,
+      "risk": "Severe",
+      "features": {
+        "currentPm25": 271,
+        "hour": 19,
+        "temperature": 19,
+        "humidity": 65,
+        "windKph": 3.8,
+        "trafficIndex": 83,
+        "demandIndex": 77,
+        "constructionIndex": 74,
+        "inversionRisk": 0.93
+      }
+    },
+    {
+      "zoneId": "faridabad",
+      "zoneName": "Faridabad",
+      "predictedPm25": 171,
+      "persistencePm25": 167,
+      "risk": "High",
+      "features": {
+        "currentPm25": 167,
+        "hour": 19,
+        "temperature": 21,
+        "humidity": 51,
+        "windKph": 8.1,
+        "trafficIndex": 60,
+        "demandIndex": 57,
+        "constructionIndex": 35,
+        "inversionRisk": 0.59
+      }
+    }
+  ]
+}
