@@ -101,8 +101,10 @@ function App() {
     <div className={`app-shell ${darkMode ? "theme-dark" : "theme-light"}`}>
       <aside className="sidebar">
         <div>
-          <div className="brand-mark">BS</div>
-          <h1>BreatheSafe Dispatcher</h1>
+          <div className="brand-lockup">
+            <img className="brand-logo" src="/breathesafe-rider-logo.png" alt="" />
+            <h1>BreatheSafe Dispatcher</h1>
+          </div>
           <p>Reducing delivery rider PM2.5 exposure without slowing the city down.</p>
         </div>
 

@@ -71,23 +71,28 @@ button {
   border-right: 1px solid var(--line);
 }
 
-.brand-mark {
-  width: 44px;
-  height: 44px;
-  border-radius: 6px;
+.brand-lockup {
+  display: grid;
+  grid-template-columns: 54px 1fr;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.brand-logo {
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+  border-radius: 8px;
   background: var(--green-soft);
   border: 1px solid var(--line-strong);
-  color: var(--green-strong);
-  display: grid;
-  place-items: center;
-  font-weight: 800;
-  margin-bottom: 14px;
+  padding: 3px;
 }
 
 .sidebar h1 {
   font-size: 1.25rem;
   line-height: 1.12;
-  margin: 0 0 8px;
+  margin: 0;
   font-weight: 650;
 }
 
