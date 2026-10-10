@@ -1105,6 +1105,15 @@ main {
   margin-top: 16px;
 }
 
+.chart-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-panel .chart-takeaway {
+  margin-top: auto;
+}
+
 .recharts-cartesian-axis-tick-value,
 .recharts-label {
   fill: var(--muted) !important;

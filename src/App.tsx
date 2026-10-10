@@ -504,7 +504,7 @@ function Metrics({ metrics }: { metrics: DashboardMetrics }) {
         </div>
       </div>
 
-      <div className="panel">
+      <div className="panel chart-panel">
         <h3>Route choice: lower exposure wins</h3>
         <p className="chart-caption">
           Each bar is a rider pollution exposure score. Lower is better. Hover shows delivery time and polluted kilometers.
@@ -515,9 +515,9 @@ function Metrics({ metrics }: { metrics: DashboardMetrics }) {
         </div>
         <div className="chart">
           <ResponsiveContainer width="100%" height={260}>
-            <BarChart data={routeData}>
+            <BarChart data={routeData} margin={{ top: 8, right: 8, left: 8, bottom: 18 }}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis dataKey="name" />
+              <XAxis dataKey="name" height={42} tickMargin={10} />
               <YAxis label={{ value: "Exposure score", angle: -90, position: "insideLeft" }} />
               <Tooltip
                 wrapperClassName="chart-tooltip"
@@ -550,7 +550,7 @@ function Metrics({ metrics }: { metrics: DashboardMetrics }) {
         </div>
       </div>
 
-      <div className="panel">
+      <div className="panel chart-panel">
         <h3>PM2.5 comparison by area</h3>
         <p className="chart-caption">
           Each area is compared for the same evening window. Green is the model forecast; gray is the simple same-as-now baseline.
@@ -565,9 +565,14 @@ function Metrics({ metrics }: { metrics: DashboardMetrics }) {
         </div>
         <div className="chart">
           <ResponsiveContainer width="100%" height={260}>
-            <BarChart data={forecastData}>
+            <BarChart data={forecastData} margin={{ top: 8, right: 8, left: 8, bottom: 34 }}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis dataKey="name" label={{ value: "Delhi/NCR area", position: "insideBottom", offset: -4 }} />
+              <XAxis
+                dataKey="name"
+                height={58}
+                tickMargin={12}
+                label={{ value: "Delhi/NCR area", position: "bottom", offset: 14 }}
+              />
               <YAxis label={{ value: "PM2.5", angle: -90, position: "insideLeft" }} />
               <Tooltip
                 wrapperClassName="chart-tooltip"
@@ -580,7 +585,10 @@ function Metrics({ metrics }: { metrics: DashboardMetrics }) {
                 }}
                 labelStyle={{ color: "var(--text)", marginBottom: 8 }}
                 itemStyle={{ color: "var(--green-strong)" }}
-                formatter={(value, name) => [`${value} PM2.5`, name === "predictedPm25" ? "Model forecast" : "Same as now"]}
+                formatter={(value, name) => [
+                  `${value} PM2.5`,
+                  name === "Model forecast" ? "Model forecast" : "Same as now",
+                ]}
               />
               <ReferenceLine y={200} stroke="#dc2626" strokeDasharray="4 4" label="Severe" />
               <Bar dataKey="predictedPm25" name="Model forecast" fill="#0f9f6e" radius={[5, 5, 0, 0]} />
