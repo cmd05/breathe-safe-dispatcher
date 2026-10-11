@@ -523,6 +523,7 @@ function Metrics({ metrics }: { metrics: DashboardMetrics }) {
               <YAxis label={{ value: "Exposure score", angle: -90, position: "insideLeft" }} />
               <Tooltip
                 wrapperClassName="chart-tooltip"
+                cursor={{ fill: "var(--chart-hover)" }}
                 contentStyle={{
                   background: "var(--surface)",
                   border: "1px solid var(--line-strong)",
@@ -578,6 +579,7 @@ function Metrics({ metrics }: { metrics: DashboardMetrics }) {
               <YAxis label={{ value: "PM2.5", angle: -90, position: "insideLeft" }} />
               <Tooltip
                 wrapperClassName="chart-tooltip"
+                cursor={{ fill: "var(--chart-hover)" }}
                 contentStyle={{
                   background: "var(--surface)",
                   border: "1px solid var(--line-strong)",
