@@ -18,9 +18,13 @@ BreatheSafe Dispatcher is a pollution-aware dispatch assistant for delivery plat
 
 **Live App:** [main.d224px9v4j740t.amplifyapp.com](https://main.d224px9v4j740t.amplifyapp.com/)
 
-**Demo Video:**
+<p align="center">
+  <img src="public/breathesafe-live-app.png" alt="BreatheSafe Dispatcher live web app" width="900" />
+</p>
 
-[![BreatheSafe Dispatcher demo video](https://img.youtube.com/vi/YOUTUBE_VIDEO_ID/maxresdefault.jpg)](https://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID)
+<p align="center">
+  <span style="color:#6b7280">Live dispatch view showing cleaner delivery assignment, PM2.5 risk, and route context</span>
+</p>
 
 ## Architecture
 
